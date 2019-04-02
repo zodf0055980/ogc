@@ -52,6 +52,27 @@ char **my_strsep(char *s, char delimiter)
     return tab - size;
 }
 
+
+char *my_strdup(char *s)
+{
+    if(!s)
+        return NULL;
+    char *c =s;
+    int size = 0;
+    while(*c) {
+        size++;
+        c++;
+    }
+    char *word = gc_alloc(sizeof(char)*(size+1));
+    int i;
+    for(i=0 ;i < size ;i++){
+        *(word+i) = *(s+i);
+    }
+    *(word+size) = '\0';
+    
+    return word;
+}
+
 int main(int argc, char *argv[])
 {
     gc_init(&argc, 1);
@@ -59,9 +80,15 @@ int main(int argc, char *argv[])
     char **sep = my_strsep("hello,world", ',');
     assert(sep);
 
+    char *dup1 = my_strdup(sep[0]);
+    char *dup2 = my_strdup(sep[1]);
+    assert(dup1);
+    assert(dup2);
     printf("%s\n", sep[0]);
     printf("%s\n", sep[1]);
 
+    printf("d1 =%s\n", dup1);
+    printf("d2 =%s\n", dup2);
     gc_run();
 
     gc_dump_internals();
